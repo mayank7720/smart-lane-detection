@@ -1,0 +1,522 @@
+{% extends "base.html" %}
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<!-- ═══ HERO SECTION ═══ -->
+<section class="hero">
+  <canvas id="radar-canvas" class="hero-canvas"></canvas>
+  <div class="hero-particles">
+    <span></span><span></span><span></span>
+    <span></span><span></span><span></span>
+  </div>
+
+  <div class="hero-content">
+    <div class="hero-badge">
+      <i class="fa-solid fa-microchip"></i>
+      LaneSight Advanced Driver Assistance System
+    </div>
+
+    <h1>LaneSight ADAS Lane Detection</h1>
+
+    <p>
+      Advanced computer-vision pipeline for real-time road lane line detection,
+      road curvature estimation, and lateral lane departure alerts — powering intelligent
+      and autonomous driving systems of tomorrow.
+    </p>
+
+    <div class="hero-buttons">
+      <a href="#demo-simulator" class="btn btn-primary btn-lg">
+        <i class="fa-solid fa-circle-play"></i> Interactive Simulator
+      </a>
+      <a href="{{ url_for('upload_image_page') }}" class="btn btn-outline btn-lg">
+        <i class="fa-solid fa-upload"></i> Upload Image/Video
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ QUICK DEMO / SIMULATOR SECTION ═══ -->
+<section class="section demo-simulator-section" id="demo-simulator">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Interactive <span class="text-accent">ADAS Simulator</span></h2>
+      <p>Select any road scenario to run our live lane detection pipeline in real time. No file upload required.</p>
+    </div>
+
+    <div class="grid-3">
+      <!-- Demo 1 -->
+      <div class="card reveal demo-card">
+        <div class="demo-image-wrapper">
+          <div class="demo-tag tag-day">Daylight</div>
+          <div class="demo-visual-hud">
+            <span class="hud-item"><i class="fa-solid fa-sun text-accent"></i> 100% Light</span>
+          </div>
+        </div>
+        <div class="demo-card-body">
+          <h3>Daylight Highway</h3>
+          <p>Ideal sunny highway driving conditions. Clear white lane markers on fresh asphalt. Great for demonstrating basic edge tracking.</p>
+          <div class="demo-metrics">
+            <span><i class="fa-solid fa-gauge-high text-accent"></i> ~75 FPS</span>
+            <span><i class="fa-solid fa-shield-halved text-accent"></i> ADAS Safe</span>
+          </div>
+          <a href="{{ url_for('run_demo', sample_name='highway_daylight') }}" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> Run ADAS Analysis
+          </a>
+        </div>
+      </div>
+
+      <!-- Demo 2 -->
+      <div class="card reveal demo-card">
+        <div class="demo-image-wrapper">
+          <div class="demo-tag tag-curve">Curved Lane</div>
+          <div class="demo-visual-hud">
+            <span class="hud-item"><i class="fa-solid fa-compass text-warning"></i> Curvature Fit</span>
+          </div>
+        </div>
+        <div class="demo-card-body">
+          <h3>Winding Curved Road</h3>
+          <p>Mountain roads with continuous curves. Tests polynomial curve fitting, road curvature radius estimation, and lateral drift cautions.</p>
+          <div class="demo-metrics">
+            <span><i class="fa-solid fa-compass text-warning"></i> Curv. Meter</span>
+            <span><i class="fa-solid fa-triangle-exclamation text-warning"></i> Caution Alert</span>
+          </div>
+          <a href="{{ url_for('run_demo', sample_name='curved_road') }}" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> Run ADAS Analysis
+          </a>
+        </div>
+      </div>
+
+      <!-- Demo 3 -->
+      <div class="card reveal demo-card">
+        <div class="demo-image-wrapper">
+          <div class="demo-tag tag-night">Night Vision</div>
+          <div class="demo-visual-hud">
+            <span class="hud-item"><i class="fa-solid fa-moon text-info"></i> Low Light</span>
+          </div>
+        </div>
+        <div class="demo-card-body">
+          <h3>Night Driving Scene</h3>
+          <p>Night driving illuminated by headlights. Features noise and shadow variations. Activates CLAHE adaptive contrast enhancement.</p>
+          <div class="demo-metrics">
+            <span><i class="fa-solid fa-wand-magic-sparkles text-info"></i> CLAHE Filter</span>
+            <span><i class="fa-solid fa-shield-halved text-accent"></i> ADAS Safe</span>
+          </div>
+          <a href="{{ url_for('run_demo', sample_name='night_driving') }}" class="btn btn-primary btn-block">
+            <i class="fa-solid fa-magnifying-glass-chart"></i> Run ADAS Analysis
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section id="features" class="section">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Powerful <span class="text-accent">Features</span></h2>
+      <p>Everything you need to detect, analyse, and visualise road lane lines with state-of-the-art accuracy.</p>
+    </div>
+
+    <div class="grid-4">
+      <!-- Card 1 -->
+      <div class="card reveal">
+        <div class="card-icon"><i class="fa-solid fa-image"></i></div>
+        <h3>Image Detection</h3>
+        <p>Upload any road image and instantly detect lane markings with colour overlays and curvature data.</p>
+        <a href="{{ url_for('upload_image_page') }}" class="btn btn-sm btn-primary">
+          Try Now <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Card 2 -->
+      <div class="card reveal">
+        <div class="card-icon"><i class="fa-solid fa-film"></i></div>
+        <h3>Video Processing</h3>
+        <p>Process dashcam footage frame-by-frame with temporal smoothing for stable, accurate lane tracking.</p>
+        <a href="{{ url_for('upload_video_page') }}" class="btn btn-sm btn-primary">
+          Try Now <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Card 3 -->
+      <div class="card reveal">
+        <div class="card-icon"><i class="fa-solid fa-tower-broadcast"></i></div>
+        <h3>Real-Time Detection</h3>
+        <p>Stream your webcam feed through our pipeline and see lane detection results in real time.</p>
+        <a href="{{ url_for('realtime') }}" class="btn btn-sm btn-primary">
+          Launch <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+
+      <!-- Card 4 -->
+      <div class="card reveal">
+        <div class="card-icon"><i class="fa-solid fa-chart-pie"></i></div>
+        <h3>Analytics Dashboard</h3>
+        <p>Track processing statistics, detection rates, and performance metrics on an interactive dashboard.</p>
+        <a href="{{ url_for('dashboard') }}" class="btn btn-sm btn-primary">
+          View Stats <i class="fa-solid fa-arrow-right"></i>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="section" style="background: rgba(18,34,64,0.4);">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>How It <span class="text-accent">Works</span></h2>
+      <p>Four simple steps from raw footage to actionable insights.</p>
+    </div>
+
+    <div class="steps">
+      <div class="step reveal">
+        <div class="step-number">1</div>
+        <div class="step-icon"><i class="fa-solid fa-cloud-arrow-up"></i></div>
+        <h4>Upload</h4>
+        <p>Drag & drop your road image or video file, or use your webcam.</p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-number">2</div>
+        <div class="step-icon"><i class="fa-solid fa-wand-magic-sparkles"></i></div>
+        <h4>Preprocess</h4>
+        <p>Grayscale conversion, Gaussian blur, CLAHE, and Canny edge detection.</p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-number">3</div>
+        <div class="step-icon"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+        <h4>Detect</h4>
+        <p>Hough Transform finds lane lines; polynomial fitting estimates curvature.</p>
+      </div>
+
+      <div class="step reveal">
+        <div class="step-number">4</div>
+        <div class="step-icon"><i class="fa-solid fa-eye"></i></div>
+        <h4>Visualise</h4>
+        <p>Colour-coded overlays, departure warnings, and exportable results.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ TECH STACK ═══ -->
+<section class="section">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>Technology <span class="text-accent">Stack</span></h2>
+      <p>Built with industry-standard tools and frameworks.</p>
+    </div>
+
+    <div class="tech-stack reveal">
+      <span class="tech-badge"><i class="fa-brands fa-python"></i> Python 3</span>
+      <span class="tech-badge"><i class="fa-solid fa-eye"></i> OpenCV</span>
+      <span class="tech-badge"><i class="fa-solid fa-calculator"></i> NumPy</span>
+      <span class="tech-badge"><i class="fa-solid fa-flask"></i> Flask</span>
+      <span class="tech-badge"><i class="fa-brands fa-html5"></i> HTML5</span>
+      <span class="tech-badge"><i class="fa-brands fa-css3-alt"></i> CSS3</span>
+      <span class="tech-badge"><i class="fa-brands fa-js"></i> JavaScript</span>
+      <span class="tech-badge"><i class="fa-solid fa-chart-simple"></i> Chart.js</span>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ STATS COUNTERS ═══ -->
+<section class="section" style="background: rgba(18,34,64,0.4);">
+  <div class="container">
+    <div class="section-title reveal">
+      <h2>By the <span class="text-accent">Numbers</span></h2>
+    </div>
+
+    <div class="stat-cards">
+      <div class="stat-card reveal">
+        <div class="stat-icon"><i class="fa-solid fa-images"></i></div>
+        <div class="stat-number" data-count="{{ stats.images_processed or 1250 }}" data-suffix="+">0</div>
+        <div class="stat-label">Images Processed</div>
+      </div>
+
+      <div class="stat-card reveal">
+        <div class="stat-icon"><i class="fa-solid fa-video"></i></div>
+        <div class="stat-number" data-count="{{ stats.videos_processed or 340 }}" data-suffix="+">0</div>
+        <div class="stat-label">Videos Analysed</div>
+      </div>
+
+      <div class="stat-card reveal">
+        <div class="stat-icon"><i class="fa-solid fa-bullseye"></i></div>
+        <div class="stat-number" data-count="96" data-suffix="%">0</div>
+        <div class="stat-label">Detection Accuracy</div>
+      </div>
+
+      <div class="stat-card reveal">
+        <div class="stat-icon"><i class="fa-solid fa-gauge-high"></i></div>
+        <div class="stat-number" data-count="30" data-suffix=" FPS">0</div>
+        <div class="stat-label">Processing Speed</div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const canvas = document.getElementById('radar-canvas');
+  if (!canvas) return;
+  const ctx = canvas.getContext('2d');
+  
+  let width = canvas.offsetWidth;
+  let height = canvas.offsetHeight;
+  canvas.width = width;
+  canvas.height = height;
+
+  const vpX = width / 2;
+  const vpY = height * 0.4;
+  
+  const scanParticles = [];
+  const scanCount = 40;
+  
+  const neonGreen = '0, 200, 83';
+  const neonCyan = '0, 176, 255';
+  
+  const ripples = [];
+
+  class ScanParticle {
+    constructor() {
+      this.reset();
+      this.progress = Math.random();
+    }
+
+    reset() {
+      this.angle = (Math.random() - 0.5) * Math.PI * 0.7; 
+      this.progress = 0;
+      this.speed = Math.random() * 0.005 + 0.002;
+      this.size = 1;
+      this.color = Math.random() > 0.4 ? neonGreen : neonCyan;
+    }
+
+    update() {
+      this.progress += this.speed;
+      if (this.progress >= 1) {
+        this.reset();
+      }
+    }
+
+    draw() {
+      const factor = Math.pow(this.progress, 2); 
+      const distance = height * 0.6 * factor;
+      
+      const x = vpX + Math.sin(this.angle) * distance;
+      const y = vpY + Math.cos(this.angle) * distance;
+      this.size = 1 + factor * 4;
+
+      if (y > height || x < 0 || x > width) return;
+
+      ctx.beginPath();
+      ctx.arc(x, y, this.size, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(${this.color}, ${0.08 + factor * 0.35})`;
+      ctx.fill();
+      
+      if (mouse.x !== null && mouse.y !== null) {
+        const dx = x - mouse.x;
+        const dy = y - mouse.y;
+        const dist = Math.sqrt(dx*dx + dy*dy);
+        if (dist < 100) {
+          ctx.beginPath();
+          ctx.arc(x, y, this.size * 1.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${neonGreen}, ${(1 - dist/100) * 0.35})`;
+          ctx.fill();
+        }
+      }
+    }
+  }
+
+  for (let i = 0; i < scanCount; i++) {
+    scanParticles.push(new ScanParticle());
+  }
+
+  let mouse = { x: null, y: null };
+  const hero = document.querySelector('.hero');
+  
+  if (hero) {
+    hero.addEventListener('mousemove', (e) => {
+      const rect = hero.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left;
+      mouse.y = e.clientY - rect.top;
+    });
+    hero.addEventListener('mouseleave', () => {
+      mouse.x = null;
+      mouse.y = null;
+    });
+    hero.addEventListener('click', (e) => {
+      const rect = hero.getBoundingClientRect();
+      const clickX = e.clientX - rect.left;
+      const clickY = e.clientY - rect.top;
+      ripples.push({
+        x: clickX,
+        y: clickY,
+        r: 0,
+        maxR: 300,
+        speed: 5,
+        alpha: 0.4
+      });
+    });
+  }
+
+  function drawEgoCar() {
+    const carWidth = 110;
+    const carHeight = 56;
+    const carX = width / 2 - carWidth / 2;
+    const carY = height - 90;
+
+    // Draw solid body outline
+    ctx.strokeStyle = `rgba(${neonGreen}, 0.25)`;
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(carX + 32, carY);
+    ctx.lineTo(carX + carWidth - 32, carY);
+    ctx.lineTo(carX + carWidth - 18, carY + 18);
+    ctx.lineTo(carX + carWidth - 6, carY + 18);
+    ctx.lineTo(carX + carWidth, carY + carHeight - 12);
+    ctx.lineTo(carX, carY + carHeight - 12);
+    ctx.lineTo(carX + 6, carY + 18);
+    ctx.lineTo(carX + 18, carY + 18);
+    ctx.closePath();
+    ctx.stroke();
+
+    // Windshield inner frame
+    ctx.strokeStyle = `rgba(${neonCyan}, 0.15)`;
+    ctx.beginPath();
+    ctx.moveTo(carX + 34, carY + 3);
+    ctx.lineTo(carX + carWidth - 34, carY + 3);
+    ctx.lineTo(carX + carWidth - 21, carY + 16);
+    ctx.lineTo(carX + 21, carY + 16);
+    ctx.closePath();
+    ctx.stroke();
+
+    // Glowing red taillights
+    ctx.fillStyle = 'rgba(255, 23, 68, 0.2)';
+    ctx.fillRect(carX + 10, carY + 26, 18, 5);
+    ctx.fillRect(carX + carWidth - 28, carY + 26, 18, 5);
+
+    ctx.strokeStyle = 'rgba(255, 23, 68, 0.35)';
+    ctx.strokeRect(carX + 10, carY + 26, 18, 5);
+    ctx.strokeRect(carX + carWidth - 28, carY + 26, 18, 5);
+
+    // Rear tires
+    ctx.strokeStyle = `rgba(${neonCyan}, 0.15)`;
+    ctx.strokeRect(carX + 5, carY + carHeight - 12, 10, 12);
+    ctx.strokeRect(carX + carWidth - 15, carY + carHeight - 12, 10, 12);
+  }
+
+  function animate() {
+    ctx.clearRect(0, 0, width, height);
+
+    const time = Date.now() * 0.001;
+
+    ctx.lineWidth = 0.8;
+    const numLines = 16;
+    for (let i = 0; i <= numLines; i++) {
+      const t = i / numLines;
+      const angle = (t - 0.5) * Math.PI * 0.8;
+      
+      const endX = vpX + Math.sin(angle) * height;
+      const endY = vpY + Math.cos(angle) * height;
+      
+      const isRoadBoundary = (i === 4 || i === 12);
+      let alpha = 0.03;
+      if (isRoadBoundary) {
+        alpha = 0.09 + Math.abs(Math.sin(time * 2.2)) * 0.04;
+        ctx.strokeStyle = `rgba(${neonGreen}, ${alpha})`;
+      } else {
+        ctx.strokeStyle = `rgba(${neonCyan}, ${alpha})`;
+      }
+      
+      ctx.beginPath();
+      ctx.moveTo(vpX, vpY);
+      ctx.lineTo(endX, endY);
+      ctx.stroke();
+    }
+
+    const numDividers = 10;
+    for (let i = 1; i <= numDividers; i++) {
+      const progress = i / numDividers;
+      const factor = Math.pow(progress, 2.5);
+      const y = vpY + (height - vpY) * factor;
+      
+      let distY = y;
+      if (mouse.x !== null && mouse.y !== null) {
+        const dy = y - mouse.y;
+        if (Math.abs(dy) < 90) {
+          const force = (1 - Math.abs(dy) / 90) * 14;
+          distY += (mouse.y > y ? -force : force);
+        }
+      }
+
+      ctx.strokeStyle = `rgba(${neonCyan}, ${0.01 + factor * 0.06})`;
+      ctx.beginPath();
+      ctx.moveTo(0, distY);
+      ctx.lineTo(width, distY);
+      ctx.stroke();
+    }
+
+    // Draw the vehicle in the lane
+    drawEgoCar();
+
+    scanParticles.forEach(p => {
+      p.update();
+      p.draw();
+    });
+
+    if (mouse.x !== null && mouse.y !== null) {
+      ctx.strokeStyle = `rgba(${neonGreen}, 0.09)`;
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 80, 0, Math.PI * 2);
+      ctx.stroke();
+
+      ctx.strokeStyle = `rgba(${neonGreen}, 0.18)`;
+      ctx.beginPath();
+      ctx.moveTo(mouse.x - 12, mouse.y);
+      ctx.lineTo(mouse.x + 12, mouse.y);
+      ctx.moveTo(mouse.x, mouse.y - 12);
+      ctx.lineTo(mouse.x, mouse.y + 12);
+      ctx.stroke();
+
+      ctx.fillStyle = `rgba(${neonGreen}, 0.025)`;
+      ctx.beginPath();
+      ctx.arc(mouse.x, mouse.y, 80, time * 2, time * 2 + 0.35);
+      ctx.lineTo(mouse.x, mouse.y);
+      ctx.fill();
+    }
+
+    for (let i = ripples.length - 1; i >= 0; i--) {
+      const r = ripples[i];
+      r.r += r.speed;
+      r.alpha = (1 - r.r / r.maxR) * 0.35;
+
+      ctx.strokeStyle = `rgba(${neonGreen}, ${r.alpha})`;
+      ctx.lineWidth = 2;
+      ctx.beginPath();
+      ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2);
+      ctx.stroke();
+
+      if (r.r >= r.maxR) {
+        ripples.splice(i, 1);
+      }
+    }
+
+    requestAnimationFrame(animate);
+  }
+
+  animate();
+
+  window.addEventListener('resize', () => {
+    width = canvas.offsetWidth;
+    height = canvas.offsetHeight;
+    canvas.width = width;
+    canvas.height = height;
+  });
+});
+</script>
+{% endblock %}

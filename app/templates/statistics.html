@@ -1,0 +1,166 @@
+{% extends "base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <ul class="breadcrumb">
+      <li><a href="{{ url_for('index') }}"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li>Dashboard</li>
+    </ul>
+    <h1><i class="fa-solid fa-chart-line text-accent"></i> Analytics Dashboard</h1>
+    <p class="text-muted mt-1">Overview of processing statistics, performance metrics, and detection history.</p>
+  </div>
+
+  <!-- Overview Cards -->
+  <div class="stat-cards mb-4">
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fa-solid fa-layer-group"></i></div>
+      <div class="stat-number">{{ stats.total_processed }}</div>
+      <div class="stat-label">Total Processed</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fa-solid fa-circle-check"></i></div>
+      <div class="stat-number">
+        {% if stats.total_processed > 0 %}
+          {{ ((stats.success_count / stats.total_processed) * 100) | round(1) }}%
+        {% else %}
+          100%
+        {% endif %}
+      </div>
+      <div class="stat-label">Success Rate</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fa-solid fa-gauge-high"></i></div>
+      <div class="stat-number">~30</div>
+      <div class="stat-label">Avg FPS</div>
+    </div>
+
+    <div class="stat-card">
+      <div class="stat-icon"><i class="fa-solid fa-bezier-curve"></i></div>
+      <div class="stat-number">
+        {% if stats.history %}
+          {{ stats.history[0].curvature_radius | default(0) }}
+        {% else %}
+          N/A
+        {% endif %}
+      </div>
+      <div class="stat-label">Last Curvature (m)</div>
+    </div>
+  </div>
+
+  <!-- Charts -->
+  <div class="grid-2 mb-4">
+    <div class="chart-card">
+      <h3><i class="fa-solid fa-chart-area text-accent"></i> Detection Rate</h3>
+      <div style="height: 280px;">
+        <canvas id="detectionChart"></canvas>
+      </div>
+    </div>
+
+    <div class="chart-card">
+      <h3><i class="fa-solid fa-chart-bar text-accent"></i> Avg Processing Time</h3>
+      <div style="height: 280px;">
+        <canvas id="processingChart"></canvas>
+      </div>
+    </div>
+  </div>
+
+  <!-- Processing History -->
+  <div class="chart-card mb-4">
+    <h3><i class="fa-solid fa-clock-rotate-left text-accent"></i> Recent Processing History</h3>
+    <div class="table-wrap">
+      {% if stats.history %}
+      <table>
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Type</th>
+            <th>Curvature</th>
+            <th>Direction</th>
+            <th>Offset</th>
+            <th>Warning</th>
+            <th>Time</th>
+            <th>Timestamp</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in stats.history[:15] %}
+          <tr>
+            <td>{{ loop.index }}</td>
+            <td>
+              {% if item.type == 'image' %}
+                <span class="tag"><i class="fa-solid fa-image"></i> Image</span>
+              {% else %}
+                <span class="tag"><i class="fa-solid fa-video"></i> Video</span>
+              {% endif %}
+            </td>
+            <td>{{ item.curvature_radius | default('N/A') }}</td>
+            <td>{{ item.direction | default('N/A') | capitalize }}</td>
+            <td>{{ item.lane_offset | default('N/A') }}</td>
+            <td>
+              {% set wl = item.warning_level | default('safe') %}
+              <span class="badge badge-{{ 'safe' if wl == 'safe' else ('caution' if wl == 'caution' else 'danger') }}">
+                {{ wl | upper }}
+              </span>
+            </td>
+            <td>{{ item.processing_time | default('N/A') }}s</td>
+            <td>{{ item.timestamp | default('—') }}</td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+      {% else %}
+      <div class="empty-state">
+        <i class="fa-solid fa-inbox"></i>
+        <h3>No Processing History</h3>
+        <p>Process an image or video to see results here.</p>
+        <a href="{{ url_for('upload_image_page') }}" class="btn btn-primary btn-sm mt-2">
+          <i class="fa-solid fa-upload"></i> Upload Image
+        </a>
+      </div>
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Performance Section -->
+  <div class="chart-card mb-4">
+    <h3><i class="fa-solid fa-bolt text-accent"></i> Performance Summary</h3>
+    <div class="grid-3 mt-3">
+      <div class="meta-card">
+        <div class="meta-value">{{ stats.images_processed }}</div>
+        <div class="meta-label">Images Processed</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-value">{{ stats.videos_processed }}</div>
+        <div class="meta-label">Videos Processed</div>
+      </div>
+      <div class="meta-card">
+        <div class="meta-value">{{ stats.success_count }}</div>
+        <div class="meta-label">Successful Runs</div>
+      </div>
+    </div>
+  </div>
+
+  <div style="height: 60px;"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<!-- Chart.js CDN -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+<script>
+  // Re-initialise charts after Chart.js loads
+  if (typeof initDashboardCharts === "function") {
+    initDashboardCharts();
+  } else {
+    document.addEventListener("DOMContentLoaded", () => {
+      if (typeof initDashboardCharts === "function") initDashboardCharts();
+    });
+  }
+</script>
+{% endblock %}

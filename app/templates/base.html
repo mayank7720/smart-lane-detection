@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>{% block title %}Smart Lane Detection{% endblock %} — LaneSight ADAS</title>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+
+  <!-- Font Awesome 6 -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+
+  <!-- App Stylesheet -->
+  <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}" />
+</head>
+<body>
+
+  <!-- ═══ NAVBAR ═══ -->
+  <nav class="navbar">
+    <a href="{{ url_for('index') }}" class="navbar-brand">
+      <span class="logo-icon"><i class="fa-solid fa-road"></i></span>
+      LaneSight <span class="text-accent">ADAS</span>
+    </a>
+
+    <button class="navbar-toggler" aria-label="Toggle navigation">
+      <i class="fa-solid fa-bars"></i>
+    </button>
+
+    <ul class="navbar-nav">
+      <li>
+        <a href="{{ url_for('index') }}"
+           class="nav-link {{ 'active' if request.endpoint == 'index' }}">
+          <i class="fa-solid fa-house"></i> Home
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('upload_image_page') }}"
+           class="nav-link {{ 'active' if request.endpoint in ['upload_image_page', 'upload_image'] }}">
+          <i class="fa-solid fa-image"></i> Image
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('upload_video_page') }}"
+           class="nav-link {{ 'active' if request.endpoint in ['upload_video_page', 'upload_video'] }}">
+          <i class="fa-solid fa-video"></i> Video
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('realtime') }}"
+           class="nav-link {{ 'active' if request.endpoint == 'realtime' }}">
+          <i class="fa-solid fa-tower-broadcast"></i> Real-Time
+        </a>
+      </li>
+      <li>
+        <a href="{{ url_for('dashboard') }}"
+           class="nav-link {{ 'active' if request.endpoint == 'dashboard' }}">
+          <i class="fa-solid fa-chart-line"></i> Dashboard
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- ═══ FLASH MESSAGES ═══ -->
+  {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+      <div class="flash-container">
+        {% for category, message in messages %}
+          <div class="flash-message {{ category }}">
+            {% if category == 'success' %}<i class="fa-solid fa-circle-check"></i>
+            {% elif category == 'warning' %}<i class="fa-solid fa-triangle-exclamation"></i>
+            {% elif category == 'danger' %}<i class="fa-solid fa-circle-xmark"></i>
+            {% else %}<i class="fa-solid fa-circle-info"></i>{% endif %}
+            {{ message }}
+            <button class="flash-close"><i class="fa-solid fa-xmark"></i></button>
+          </div>
+        {% endfor %}
+      </div>
+    {% endif %}
+  {% endwith %}
+
+  <!-- ═══ LOADING OVERLAY ═══ -->
+  <div class="loading-overlay">
+    <div class="spinner"></div>
+    <p>Processing your file — please wait…</p>
+  </div>
+
+  <!-- ═══ MAIN CONTENT ═══ -->
+  <main class="main-content">
+    {% block content %}{% endblock %}
+  </main>
+
+  <!-- ═══ FOOTER ═══ -->
+  <footer class="footer">
+    <div class="container">
+      <ul class="footer-links">
+        <li><a href="{{ url_for('index') }}">Home</a></li>
+        <li><a href="{{ url_for('upload_image_page') }}">Image Detection</a></li>
+        <li><a href="{{ url_for('upload_video_page') }}">Video Processing</a></li>
+        <li><a href="{{ url_for('realtime') }}">Real-Time</a></li>
+        <li><a href="{{ url_for('dashboard') }}">Dashboard</a></li>
+      </ul>
+      <p>&copy; 2026 Smart Lane Detection System &middot; Built with <i class="fa-solid fa-heart text-accent"></i> using Flask &amp; OpenCV</p>
+    </div>
+  </footer>
+
+  <!-- ═══ SCRIPTS ═══ -->
+  <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+  {% block extra_js %}{% endblock %}
+
+</body>
+</html>

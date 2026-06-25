@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+{% block title %}Upload Video{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <ul class="breadcrumb">
+      <li><a href="{{ url_for('index') }}"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li>Video Upload</li>
+    </ul>
+    <h1><i class="fa-solid fa-video text-accent"></i> Video Processing</h1>
+    <p class="text-muted mt-1">Upload dashcam footage to detect lane lines across every frame with temporal smoothing.</p>
+  </div>
+
+  <!-- Upload Area -->
+  <div class="upload-area">
+    <div class="upload-main">
+      <form action="{{ url_for('upload_video') }}" method="POST" enctype="multipart/form-data" class="upload-form">
+        <div class="upload-zone">
+          <input type="file" name="file" accept=".mp4,.avi,.mov,.mkv,.webm" />
+          <div class="upload-icon"><i class="fa-solid fa-clapperboard"></i></div>
+          <h3>Drag & drop your video file here</h3>
+          <p>or click to browse files</p>
+          <div class="supported-formats">
+            <i class="fa-solid fa-circle-info"></i>
+            Supported: MP4, AVI, MOV, MKV, WebM — Max 100 MB
+          </div>
+        </div>
+
+        <div class="file-preview"></div>
+
+        <div class="progress-bar-wrap">
+          <div class="progress-bar-fill"></div>
+        </div>
+
+        <div class="upload-btn-wrap">
+          <button type="submit" class="btn btn-primary btn-lg btn-block">
+            <i class="fa-solid fa-bolt"></i> Process Video
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Sidebar -->
+    <aside class="upload-sidebar">
+      <div class="card">
+        <h4><i class="fa-solid fa-lightbulb"></i> Video Tips</h4>
+        <ul>
+          <li><i class="fa-solid fa-check"></i> Dashcam footage works best</li>
+          <li><i class="fa-solid fa-check"></i> Shorter clips process faster</li>
+          <li><i class="fa-solid fa-check"></i> 720p or higher recommended</li>
+          <li><i class="fa-solid fa-check"></i> Stable camera position preferred</li>
+          <li><i class="fa-solid fa-check"></i> Daytime footage gives best results</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4><i class="fa-solid fa-clock-rotate-left"></i> Processing Info</h4>
+        <ul>
+          <li><i class="fa-solid fa-arrow-right"></i> Frame-by-frame lane detection</li>
+          <li><i class="fa-solid fa-arrow-right"></i> Temporal smoothing across frames</li>
+          <li><i class="fa-solid fa-arrow-right"></i> Average curvature computation</li>
+          <li><i class="fa-solid fa-arrow-right"></i> Departure warning per-frame</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h4><i class="fa-solid fa-circle-exclamation"></i> Please Note</h4>
+        <ul>
+          <li><i class="fa-solid fa-info"></i> Video processing may take a minute</li>
+          <li><i class="fa-solid fa-info"></i> Result is downloadable as MP4</li>
+          <li><i class="fa-solid fa-info"></i> Large files take longer to upload</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,131 @@
+{% extends "base.html" %}
+{% block title %}Real-Time Detection{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <ul class="breadcrumb">
+      <li><a href="{{ url_for('index') }}"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li>Real-Time Detection</li>
+    </ul>
+    <h1><i class="fa-solid fa-tower-broadcast text-accent"></i> Real-Time Detection</h1>
+    <p class="text-muted mt-1">Live webcam lane detection with instant visual feedback.</p>
+  </div>
+
+  <!-- Controls -->
+  <div class="controls-bar">
+    <button id="startFeed" class="btn btn-primary">
+      <i class="fa-solid fa-play"></i> Start Feed
+    </button>
+    <button id="stopFeed" class="btn btn-danger" disabled>
+      <i class="fa-solid fa-stop"></i> Stop Feed
+    </button>
+  </div>
+
+  <!-- Layout -->
+  <div class="realtime-layout">
+    <!-- Video Feed -->
+    <div class="video-feed-container" id="feedContainer">
+      <div class="feed-overlay">
+        <span class="status-dot offline" id="statusDot">Offline</span>
+      </div>
+
+      <div class="no-feed-message" id="noFeedMsg">
+        <i class="fa-solid fa-video-slash"></i>
+        <h3>No Live Feed</h3>
+        <p>Click <strong>Start Feed</strong> to begin real-time lane detection.<br>
+           A webcam is required for this feature.</p>
+      </div>
+
+      <img id="feedImg" src="" alt="Live feed" style="display: none;" />
+    </div>
+
+    <!-- Sidebar Stats -->
+    <aside class="realtime-sidebar">
+      <div class="card">
+        <h4 style="font-family: var(--font-heading); font-size: 0.95rem; color: var(--accent); margin-bottom: 16px;">
+          <i class="fa-solid fa-gauge"></i> Live Statistics
+        </h4>
+        <div class="sidebar-stat">
+          <span class="label">Status</span>
+          <span class="value" id="liveStatus">Offline</span>
+        </div>
+        <div class="sidebar-stat">
+          <span class="label">FPS</span>
+          <span class="value" id="liveFps">—</span>
+        </div>
+        <div class="sidebar-stat">
+          <span class="label">Curvature</span>
+          <span class="value" id="liveCurvature">—</span>
+        </div>
+        <div class="sidebar-stat">
+          <span class="label">Offset</span>
+          <span class="value" id="liveOffset">—</span>
+        </div>
+        <div class="sidebar-stat">
+          <span class="label">Warning</span>
+          <span class="value" id="liveWarning">—</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h4 style="font-family: var(--font-heading); font-size: 0.95rem; color: var(--accent); margin-bottom: 16px;">
+          <i class="fa-solid fa-circle-info"></i> Information
+        </h4>
+        <p style="font-size: 0.85rem; color: var(--text-secondary); line-height: 1.7;">
+          The live feed processes each webcam frame through the full detection pipeline:
+          preprocessing → ROI masking → Hough lines → curvature estimation → overlay.
+        </p>
+      </div>
+
+      <div class="card">
+        <h4 style="font-family: var(--font-heading); font-size: 0.95rem; color: var(--accent); margin-bottom: 16px;">
+          <i class="fa-solid fa-keyboard"></i> Requirements
+        </h4>
+        <ul style="list-style: none; padding: 0;">
+          <li style="padding: 4px 0; font-size: 0.85rem; color: var(--text-secondary);"><i class="fa-solid fa-check" style="color: var(--primary); margin-right: 8px;"></i> Connected webcam</li>
+          <li style="padding: 4px 0; font-size: 0.85rem; color: var(--text-secondary);"><i class="fa-solid fa-check" style="color: var(--primary); margin-right: 8px;"></i> Browser camera permissions</li>
+          <li style="padding: 4px 0; font-size: 0.85rem; color: var(--text-secondary);"><i class="fa-solid fa-check" style="color: var(--primary); margin-right: 8px;"></i> OpenCV installed on server</li>
+        </ul>
+      </div>
+    </aside>
+  </div>
+
+  <div style="height: 60px;"></div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+  const startBtn   = document.getElementById("startFeed");
+  const stopBtn    = document.getElementById("stopFeed");
+  const feedImg    = document.getElementById("feedImg");
+  const noFeedMsg  = document.getElementById("noFeedMsg");
+  const statusDot  = document.getElementById("statusDot");
+  const liveStatus = document.getElementById("liveStatus");
+
+  startBtn.addEventListener("click", () => {
+    feedImg.src = "{{ url_for('video_feed') }}";
+    feedImg.style.display = "block";
+    noFeedMsg.style.display = "none";
+    statusDot.classList.remove("offline");
+    statusDot.textContent = "Live";
+    liveStatus.textContent = "Streaming";
+    startBtn.disabled = true;
+    stopBtn.disabled = false;
+  });
+
+  stopBtn.addEventListener("click", () => {
+    feedImg.src = "";
+    feedImg.style.display = "none";
+    noFeedMsg.style.display = "block";
+    statusDot.classList.add("offline");
+    statusDot.textContent = "Offline";
+    liveStatus.textContent = "Offline";
+    startBtn.disabled = false;
+    stopBtn.disabled = true;
+  });
+</script>
+{% endblock %}

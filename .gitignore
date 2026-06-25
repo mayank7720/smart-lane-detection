@@ -1,0 +1,40 @@
+# Byte-compiled / optimized
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Virtual environments
+venv/
+env/
+.venv/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# Uploads and processed output
+app/static/uploads/*
+app/static/processed/*
+!app/static/uploads/.gitkeep
+!app/static/processed/.gitkeep
+
+# Data (large files)
+data/images/*
+data/videos/*
+!data/sample/
+
+# Output
+output/images/*
+output/videos/*
+output/reports/*
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+*.log
+temp_recording/

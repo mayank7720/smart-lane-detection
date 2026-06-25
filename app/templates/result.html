@@ -1,0 +1,110 @@
+{% extends "base.html" %}
+{% block title %}Detection Result{% endblock %}
+
+{% block content %}
+<div class="container">
+  <!-- Page Header -->
+  <div class="page-header">
+    <ul class="breadcrumb">
+      <li><a href="{{ url_for('index') }}"><i class="fa-solid fa-house"></i> Home</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li><a href="{{ url_for('upload_image_page') if meta.type == 'image' else url_for('upload_video_page') }}">
+        {{ 'Image' if meta.type == 'image' else 'Video' }} Upload</a></li>
+      <li class="separator"><i class="fa-solid fa-chevron-right"></i></li>
+      <li>Result</li>
+    </ul>
+    <h1><i class="fa-solid fa-circle-check text-accent"></i> Detection Result</h1>
+  </div>
+
+  <!-- Side-by-Side Comparison -->
+  <div class="result-grid">
+    <div class="result-img-wrap">
+      <span class="result-img-label">Original</span>
+      {% if meta.type == 'video' %}
+        <video controls>
+          <source src="{{ url_for('uploaded_file', filename=meta.original) }}" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      {% else %}
+        <img src="{{ url_for('uploaded_file', filename=meta.original) }}" alt="Original image" />
+      {% endif %}
+    </div>
+
+    <div class="result-img-wrap">
+      <span class="result-img-label" style="background: rgba(0,200,83,0.7);">Processed</span>
+      {% if meta.type == 'video' %}
+        <video controls>
+          <source src="{{ url_for('processed_file', filename=meta.processed) }}" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
+      {% else %}
+        <img src="{{ url_for('processed_file', filename=meta.processed) }}" alt="Processed image" />
+      {% endif %}
+    </div>
+  </div>
+
+  <!-- Metadata -->
+  <div class="meta-grid mb-4">
+    <div class="meta-card">
+      <div class="meta-value">
+        {% if meta.curvature_radius %}{{ meta.curvature_radius }} m{% else %}N/A{% endif %}
+      </div>
+      <div class="meta-label"><i class="fa-solid fa-bezier-curve"></i> Curvature Radius</div>
+    </div>
+
+    <div class="meta-card">
+      <div class="meta-value">{{ meta.direction | default('N/A') | capitalize }}</div>
+      <div class="meta-label"><i class="fa-solid fa-compass"></i> Direction</div>
+    </div>
+
+    <div class="meta-card">
+      <div class="meta-value">
+        {% if meta.lane_offset is not none %}{{ meta.lane_offset }}{% else %}N/A{% endif %}
+      </div>
+      <div class="meta-label"><i class="fa-solid fa-left-right"></i> Lane Offset</div>
+    </div>
+
+    <div class="meta-card">
+      <div class="meta-value">
+        {% set wl = meta.warning_level | default('safe') %}
+        <span class="badge badge-{{ 'safe' if wl == 'safe' else ('caution' if wl == 'caution' else 'danger') }}">
+          {% if wl == 'safe' %}<i class="fa-solid fa-shield-check"></i>
+          {% elif wl == 'caution' %}<i class="fa-solid fa-triangle-exclamation"></i>
+          {% else %}<i class="fa-solid fa-circle-exclamation"></i>{% endif %}
+          {{ wl | upper }}
+        </span>
+      </div>
+      <div class="meta-label"><i class="fa-solid fa-signal"></i> Warning Level</div>
+    </div>
+
+    <div class="meta-card">
+      <div class="meta-value">
+        {% if meta.processing_time %}{{ meta.processing_time }}s{% else %}N/A{% endif %}
+      </div>
+      <div class="meta-label"><i class="fa-solid fa-stopwatch"></i> Processing Time</div>
+    </div>
+
+    {% if meta.type == 'video' %}
+    <div class="meta-card">
+      <div class="meta-value">{{ meta.frame_count | default(0) }}</div>
+      <div class="meta-label"><i class="fa-solid fa-film"></i> Frames Processed</div>
+    </div>
+    {% endif %}
+  </div>
+
+  <!-- Actions -->
+  <div class="result-actions">
+    <a href="{{ url_for('processed_file', filename=meta.processed) }}" download class="btn btn-primary">
+      <i class="fa-solid fa-download"></i> Download Result
+    </a>
+    <a href="{{ url_for('upload_image_page') if meta.type == 'image' else url_for('upload_video_page') }}" class="btn btn-outline">
+      <i class="fa-solid fa-rotate"></i> Process Another
+    </a>
+    <a href="{{ url_for('dashboard') }}" class="btn btn-secondary">
+      <i class="fa-solid fa-chart-line"></i> View Dashboard
+    </a>
+  </div>
+
+  <div style="height: 60px;"></div>
+</div>
+{% endblock %}
