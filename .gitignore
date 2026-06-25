@@ -38,3 +38,4 @@ Thumbs.db
 .env
 *.log
 temp_recording/
+test_*.mp4
