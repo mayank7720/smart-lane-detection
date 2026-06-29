@@ -170,9 +170,25 @@ For production deployments, wrap the Flask application in a WSGI container.
     python wsgi_production.py
     ```
 
+### C. Deploying on Streamlit Cloud (Recommended)
+Streamlit Cloud offers a completely free, fast hosting environment for Python applications.
+
+1.  **Run Streamlit Locally**:
+    ```bash
+    pip install -r requirements.txt
+    streamlit run streamlit_app.py
+    ```
+2.  **Deploy on Streamlit Cloud**:
+    - Push your latest changes to GitHub (already pushed).
+    - Log into [Streamlit Community Cloud](https://share.streamlit.io/).
+    - Click **"New app"** and select this GitHub repository (`mayank7720/smart-lane-detection`).
+    - Set the main file path to `streamlit_app.py`.
+    - Click **"Deploy"**. Streamlit will automatically install the system and python packages and provision your dashboard online!
+
 ---
 
 ## 6. Containerised Deployment (Docker)
+
 
 Docker allows containerising the entire application so that it runs reliably on any cloud provider (AWS, Azure, GCP) or server.
 
